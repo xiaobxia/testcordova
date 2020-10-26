@@ -18,6 +18,7 @@
 */
 package org.apache.cordova.engine;
 
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
@@ -58,6 +59,8 @@ public class SystemWebViewClient extends WebViewClient {
     protected final SystemWebViewEngine parentEngine;
     private boolean doClearHistory = false;
     boolean isCurrentlyLoading;
+    boolean isCordovaInject;
+    private static final String INJECTION_TOKEN = "http://injection/";
 
     /** The authorization tokens. */
     private Hashtable<String, AuthenticationToken> authenticationTokens = new Hashtable<String, AuthenticationToken>();
@@ -173,7 +176,14 @@ public class SystemWebViewClient extends WebViewClient {
             this.doClearHistory = false;
         }
         parentEngine.client.onPageFinishedLoading(url);
-
+        // 注入js
+        if (!isCordovaInject) {
+            LOG.e(TAG, "----------------inject cordova.js--------------");
+            String jsWrapper = "(function(d) { var c = d.createElement('script'); c.src = %s; d.body.appendChild(c); })(document)";
+            //在InAppBrowser WebView中注入一个对象(脚本或样式)。
+            injectDeferredObject(view, INJECTION_TOKEN + "www/cordova.js", jsWrapper);
+            isCordovaInject = true;
+        }
     }
 
     /**
@@ -319,6 +329,18 @@ public class SystemWebViewClient extends WebViewClient {
     @Override
     @SuppressWarnings("deprecation")
     public WebResourceResponse shouldInterceptRequest(WebView view, String url) {
+        if (url != null && url.contains(INJECTION_TOKEN)) {
+            String assetPath = url.substring(url.indexOf(INJECTION_TOKEN) + INJECTION_TOKEN.length(), url.length());
+            try {
+                return new WebResourceResponse(
+                        "application/javascript",
+                        "UTF-8",
+                        view.getContext().getAssets().open(assetPath));
+            } catch (IOException e) {
+                e.printStackTrace();
+                return new WebResourceResponse("text/plain", "UTF-8", null);
+            }
+        }
         try {
             // Check the against the whitelist and lock out access to the WebView directory
             // Changing this will cause problems for your application
@@ -365,5 +387,35 @@ public class SystemWebViewClient extends WebViewClient {
         }
 
         return false;
+    }
+
+    private void injectDeferredObject(WebView webView, String source, String jsWrapper) {
+        if (webView != null) {
+            String scriptToInject;
+            if (jsWrapper != null) {
+                org.json.JSONArray jsonEsc = new org.json.JSONArray();
+                jsonEsc.put(source);
+                String jsonRepr = jsonEsc.toString();
+                String jsonSourceString = jsonRepr.substring(1, jsonRepr.length() - 1);
+                scriptToInject = String.format(jsWrapper, jsonSourceString);
+            } else {
+                scriptToInject = source;
+            }
+            final String finalScriptToInject = scriptToInject;
+            this.parentEngine.cordova.getActivity().runOnUiThread(new Runnable() {
+                @SuppressLint("NewApi")
+                @Override
+                public void run() {
+                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
+                        // This action will have the side-effect of blurring the currently focused element
+                        webView.loadUrl("javascript:" + finalScriptToInject);
+                    } else {
+                        webView.evaluateJavascript(finalScriptToInject, null);
+                    }
+                }
+            });
+        } else {
+            LOG.d(TAG, "Can't inject code into the system browser");
+        }
     }
 }
