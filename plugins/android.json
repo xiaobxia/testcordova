@@ -9,7 +9,19 @@
   "installed_plugins": {
     "cordova-plugin-whitelist": {
       "PACKAGE_NAME": "io.cordova.hellocordova"
+    },
+    "jpush-phonegap-plugin": {
+      "APP_KEY": "d68bc920056a8403e960c85c",
+      "CHANNEL": "developer-default",
+      "PACKAGE_NAME": "io.cordova.hellocordova"
     }
   },
-  "dependent_plugins": {}
+  "dependent_plugins": {
+    "cordova-plugin-device": {
+      "PACKAGE_NAME": "io.cordova.hellocordova"
+    },
+    "cordova-plugin-jcore": {
+      "PACKAGE_NAME": "io.cordova.hellocordova"
+    }
+  }
 }

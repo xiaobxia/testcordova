@@ -17,7 +17,11 @@
   },
   "cordova": {
     "plugins": {
-      "cordova-plugin-whitelist": {}
+      "cordova-plugin-whitelist": {},
+      "jpush-phonegap-plugin": {
+        "APP_KEY": "d68bc920056a8403e960c85c",
+        "CHANNEL": "developer-default"
+      }
     },
     "platforms": [
       "android"
