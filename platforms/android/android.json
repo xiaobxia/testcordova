@@ -19,6 +19,10 @@
             {
               "xml": "<feature name=\"JPushPlugin\"><param name=\"android-package\" value=\"cn.jiguang.cordova.push.JPushPlugin\" /></feature>",
               "count": 1
+            },
+            {
+              "xml": "<feature name=\"LocalNotification\"><param name=\"android-package\" value=\"de.appplant.cordova.plugin.localnotification.LocalNotification\" /></feature>",
+              "count": 1
             }
           ]
         }
@@ -28,19 +32,19 @@
           "/manifest": [
             {
               "xml": "<uses-permission android:name=\"android.permission.REQUEST_INSTALL_PACKAGES\" />",
-              "count": 15
+              "count": 17
             },
             {
               "xml": "<uses-permission android:name=\"android.permission.ACCESS_NETWORK_STATE\" />",
-              "count": 16
+              "count": 18
             },
             {
               "xml": "<uses-permission android:name=\"android.permission.ACCESS_WIFI_STATE\" />",
-              "count": 16
+              "count": 18
             },
             {
               "xml": "<uses-permission android:name=\"android.permission.WRITE_EXTERNAL_STORAGE\" />",
-              "count": 16
+              "count": 18
             },
             {
               "xml": "<permission android:name=\"com.ng.n3app.permission.JPUSH_MESSAGE\" android:protectionLevel=\"signature\" />",
@@ -52,39 +56,39 @@
             },
             {
               "xml": "<uses-permission android:name=\"android.permission.RECEIVE_USER_PRESENT\" />",
-              "count": 16
+              "count": 18
             },
             {
               "xml": "<uses-permission android:name=\"android.permission.READ_PHONE_STATE\" />",
-              "count": 16
+              "count": 18
             },
             {
               "xml": "<uses-permission android:name=\"android.permission.READ_EXTERNAL_STORAGE\" />",
-              "count": 16
+              "count": 18
             },
             {
               "xml": "<uses-permission android:name=\"android.permission.MOUNT_UNMOUNT_FILESYSTEMS\" />",
-              "count": 16
+              "count": 18
             },
             {
               "xml": "<uses-permission android:name=\"android.permission.WRITE_SETTINGS\" />",
-              "count": 15
+              "count": 17
             },
             {
               "xml": "<uses-permission android:name=\"android.permission.VIBRATE\" />",
-              "count": 16
+              "count": 18
             },
             {
               "xml": "<uses-permission android:name=\"android.permission.WAKE_LOCK\" />",
-              "count": 15
+              "count": 18
             },
             {
               "xml": "<permission android:name=\"io.cordova.hellocordova.permission.JPUSH_MESSAGE\" android:protectionLevel=\"signature\" />",
-              "count": 2
+              "count": 4
             },
             {
               "xml": "<uses-permission android:name=\"io.cordova.hellocordova.permission.JPUSH_MESSAGE\" />",
-              "count": 2
+              "count": 4
             },
             {
               "xml": "<uses-permission android:name=\"android.permission.INTERNET\" />",
@@ -187,6 +191,32 @@
             {
               "xml": "<meta-data android:name=\"JPUSH_APPKEY\" android:value=\"d68bc920056a8403e960c85c\" />",
               "count": 1
+            },
+            {
+              "xml": "<provider android:authorities=\"${applicationId}.provider\" android:exported=\"false\" android:grantUriPermissions=\"true\" android:name=\"de.appplant.cordova.plugin.notification.util.AssetProvider\"><meta-data android:name=\"android.support.FILE_PROVIDER_PATHS\" android:resource=\"@xml/localnotification_provider_paths\" /></provider>",
+              "count": 1
+            },
+            {
+              "xml": "<receiver android:exported=\"false\" android:name=\"de.appplant.cordova.plugin.localnotification.TriggerReceiver\" />",
+              "count": 1
+            },
+            {
+              "xml": "<receiver android:exported=\"false\" android:name=\"de.appplant.cordova.plugin.localnotification.ClearReceiver\" />",
+              "count": 1
+            },
+            {
+              "xml": "<activity android:exported=\"false\" android:launchMode=\"singleInstance\" android:name=\"de.appplant.cordova.plugin.localnotification.ClickReceiver\" android:theme=\"@android:style/Theme.Translucent\" />",
+              "count": 1
+            }
+          ]
+        }
+      },
+      "config.xml": {
+        "parents": {
+          "/*": [
+            {
+              "xml": "<feature name=\"Badge\"><param name=\"android-package\" value=\"de.appplant.cordova.plugin.badge.Badge\" /></feature>",
+              "count": 1
             }
           ]
         }
@@ -207,6 +237,12 @@
       "APP_KEY": "d68bc920056a8403e960c85c",
       "CHANNEL": "developer-default",
       "PACKAGE_NAME": "io.cordova.hellocordova"
+    },
+    "cordova-plugin-badge": {
+      "PACKAGE_NAME": "io.cordova.hellocordova"
+    },
+    "cordova-plugin-local-notification": {
+      "PACKAGE_NAME": "io.cordova.hellocordova"
     }
   },
   "dependent_plugins": {},
@@ -226,12 +262,48 @@
       "clobbers": [
         "JPush"
       ]
+    },
+    {
+      "id": "cordova-plugin-badge.Badge",
+      "file": "plugins/cordova-plugin-badge/www/badge.js",
+      "pluginId": "cordova-plugin-badge",
+      "clobbers": [
+        "cordova.plugins.notification.badge"
+      ]
+    },
+    {
+      "id": "cordova-plugin-local-notification.LocalNotification",
+      "file": "plugins/cordova-plugin-local-notification/www/local-notification.js",
+      "pluginId": "cordova-plugin-local-notification",
+      "clobbers": [
+        "cordova.plugins.notification.local"
+      ]
+    },
+    {
+      "id": "cordova-plugin-local-notification.LocalNotification.Core",
+      "file": "plugins/cordova-plugin-local-notification/www/local-notification-core.js",
+      "pluginId": "cordova-plugin-local-notification",
+      "clobbers": [
+        "cordova.plugins.notification.local.core",
+        "plugin.notification.local.core"
+      ]
+    },
+    {
+      "id": "cordova-plugin-local-notification.LocalNotification.Util",
+      "file": "plugins/cordova-plugin-local-notification/www/local-notification-util.js",
+      "pluginId": "cordova-plugin-local-notification",
+      "merges": [
+        "cordova.plugins.notification.local.core",
+        "plugin.notification.local.core"
+      ]
     }
   ],
   "plugin_metadata": {
     "cordova-plugin-whitelist": "1.3.4",
     "cordova-plugin-device": "2.0.3",
     "cordova-plugin-jcore": "1.3.3",
-    "jpush-phonegap-plugin": "3.7.6"
+    "jpush-phonegap-plugin": "3.7.6",
+    "cordova-plugin-badge": "0.8.8",
+    "cordova-plugin-local-notification": "0.9.0-beta.2"
   }
 }

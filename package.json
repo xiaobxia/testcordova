@@ -13,6 +13,8 @@
   "author": "Apache Cordova Team",
   "license": "Apache-2.0",
   "devDependencies": {
+    "cordova-plugin-badge": "^0.8.8",
+    "cordova-plugin-local-notification": "^0.9.0-beta.2",
     "cordova-plugin-whitelist": "^1.3.4"
   },
   "cordova": {
@@ -21,7 +23,8 @@
       "jpush-phonegap-plugin": {
         "APP_KEY": "d68bc920056a8403e960c85c",
         "CHANNEL": "developer-default"
-      }
+      },
+      "cordova-plugin-local-notification": {}
     },
     "platforms": [
       "android"

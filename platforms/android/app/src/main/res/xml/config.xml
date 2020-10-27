@@ -10,6 +10,12 @@
     <feature name="JPushPlugin">
         <param name="android-package" value="cn.jiguang.cordova.push.JPushPlugin" />
     </feature>
+    <feature name="LocalNotification">
+        <param name="android-package" value="de.appplant.cordova.plugin.localnotification.LocalNotification" />
+    </feature>
+    <feature name="Badge">
+        <param name="android-package" value="de.appplant.cordova.plugin.badge.Badge" />
+    </feature>
     <name>农经App</name>
     <description>
         A sample Apache Cordova application that responds to the deviceready event.
